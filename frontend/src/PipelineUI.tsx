@@ -1,31 +1,34 @@
-// ui.js
-// Displays the drag-and-drop UI
-// --------------------------------------------------
-
 import { useState, useRef, useCallback } from "react";
 import ReactFlow, {
   Controls,
   Background,
   MiniMap,
   BackgroundVariant,
+  ConnectionLineType,
 } from "reactflow";
 import { useStore } from "./store";
 import { shallow } from "zustand/shallow";
-import OutputNode from "./nodes/OutputNode";
 
 import "reactflow/dist/style.css";
-import { InputNode } from "./nodes/InputNode";
-import TextNode from "./nodes/TextNode";
-import LLMNode from "./nodes/LLMNode";
+import { nodeConfigs } from "./lib/config";
+import BaseNode from "./nodes/BaseNode";
 
-const gridSize = 10;
+const gridSize = 20;
 const proOptions = { hideAttribution: true };
-const nodeTypes = {
-  customInput: InputNode,
-  llm: LLMNode,
-  customOutput: OutputNode,
-  text: TextNode,
-};
+
+export const nodeTypes = Object.fromEntries(
+  Object.entries(nodeConfigs).map(([type, config]) => [
+    type,
+    (props) => {
+      const Component = config.component;
+      return (
+        <BaseNode {...props} config={config}>
+          <Component {...props} />
+        </BaseNode>
+      );
+    },
+  ]),
+);
 
 const selector = (state) => ({
   nodes: state.nodes,
@@ -37,7 +40,7 @@ const selector = (state) => ({
   onConnect: state.onConnect,
 });
 
-export const PipelineUI = () => {
+const PipelineUI = () => {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const {
@@ -110,18 +113,20 @@ export const PipelineUI = () => {
           nodeTypes={nodeTypes}
           proOptions={proOptions}
           snapGrid={[gridSize, gridSize]}
-          connectionLineType="smoothstep"
+          connectionLineType={ConnectionLineType.SmoothStep}
         >
           <Background
             id="1"
             gap={gridSize}
             color="#f1f0f0"
-            variant={BackgroundVariant.Lines}
+            variant={BackgroundVariant.Cross}
           />
-          <Controls orientation="vertical"/>
+          <Controls />
           <MiniMap />
         </ReactFlow>
       </div>
     </>
   );
 };
+
+export default PipelineUI;

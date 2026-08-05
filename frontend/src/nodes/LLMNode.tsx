@@ -1,35 +1,36 @@
+import NodeHandles from "./NodeHandles";
 
-import { Handle, Position } from 'reactflow';
+type LLMNodeProps = {
+  id: string;
+  data: {
+    model?: string;
+  };
+};
 
-const LLMNode = ({ id, data }: { id: string; data: any }) => {
-
+export default function LLMNode({ id, data }: LLMNodeProps) {
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-system`}
-        style={{top: `${100/3}%`}}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-prompt`}
-        style={{top: `${200/3}%`}}
-      />
-      <div>
-        <span>LLM</span>
+    <>
+      <div className="space-y-3 p-2">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Model
+          </p>
+
+          <div className="mt-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
+            {data?.model ?? "GPT-4"}
+          </div>
+        </div>
+
+        <p className="text-xs leading-relaxed text-slate-500">
+          Receives a system prompt and user prompt, then produces a response.
+        </p>
       </div>
-      <div>
-        <span>This is a LLM.</span>
-      </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id={`${id}-response`}
+
+      <NodeHandles
+        id={id}
+        inputs={["system", "prompt"]}
+        outputs={["response"]}
       />
-    </div>
+    </>
   );
 }
-
-export default LLMNode;

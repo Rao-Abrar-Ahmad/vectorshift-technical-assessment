@@ -1,52 +1,63 @@
-// inputNode.js
-
-import { useState } from 'react';
-import { Handle, Position } from 'reactflow';
+import { useState } from "react";
+import NodeHandles from "./NodeHandles";
 
 type InputNodeProps = {
   id: string;
-  data: any
-}
-
-export const InputNode = ({ id, data }: InputNodeProps) => {
-  const [currName, setCurrName] = useState(data?.inputName || id.replace('customInput-', 'input_'));
-  const [inputType, setInputType] = useState(data.inputType || 'Text');
-
-  const handleNameChange = (e) => {
-    setCurrName(e.target.value);
+  data: {
+    inputName?: string;
+    inputType?: "Text" | "File";
   };
+};
 
-  const handleTypeChange = (e) => {
-    setInputType(e.target.value);
-  };
+export function InputNode({ id, data }: InputNodeProps) {
+  const [inputName, setInputName] = useState(
+    data?.inputName ?? id.replace("customInput-", "input_"),
+  );
+
+  const [inputType, setInputType] = useState<"Text" | "File">(
+    data?.inputType ?? "Text",
+  );
 
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <div>
-        <span>Input</span>
-      </div>
-      <div>
-        <label>
-          Name:
-          <input 
-            type="text" 
-            value={currName} 
-            onChange={handleNameChange} 
+    <>
+      <div className="space-y-3">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-slate-500">
+            Name
+          </label>
+
+          <input
+            type="text"
+            value={inputName}
+            onChange={(e) => setInputName(e.target.value)}
+            placeholder="Input name"
+            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
-        </label>
-        <label>
-          Type:
-          <select value={inputType} onChange={handleTypeChange}>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-medium text-slate-500">
+            Type
+          </label>
+
+          <select
+            value={inputType}
+            onChange={(e) =>
+              setInputType(e.target.value as "Text" | "File")
+            }
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          >
             <option value="Text">Text</option>
             <option value="File">File</option>
           </select>
-        </label>
+        </div>
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id={`${id}-value`}
+
+      <NodeHandles
+        id={id}
+        inputs={[]}
+        outputs={["value"]}
       />
-    </div>
+    </>
   );
 }

@@ -1,49 +1,65 @@
-// outputNode.js
+import { useState } from "react";
+import NodeHandles from "./NodeHandles";
 
-import { useState } from 'react';
-import { Handle, Position } from 'reactflow';
+type OutputType = "Text" | "Image";
 
-const OutputNode = ({ id, data }: { id: string; data: any }) => {
-  const [currName, setCurrName] = useState(data?.outputName || id.replace('customOutput-', 'output_'));
-  const [outputType, setOutputType] = useState(data.outputType || 'Text');
-
-  const handleNameChange = (e) => {
-    setCurrName(e.target.value);
+type OutputNodeProps = {
+  id: string;
+  data: {
+    outputName?: string;
+    outputType?: OutputType;
   };
+};
 
-  const handleTypeChange = (e) => {
-    setOutputType(e.target.value);
-  };
+export default function OutputNode({ id, data }: OutputNodeProps) {
+  const [outputName, setOutputName] = useState(
+    data?.outputName ?? id.replace("customOutput-", "output_"),
+  );
+
+  const [outputType, setOutputType] = useState<OutputType>(
+    data?.outputType ?? "Text",
+  );
 
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-value`}
-      />
-      <div>
-        <span>Output</span>
-      </div>
-      <div>
-        <label>
-          Name:
-          <input 
-            type="text" 
-            value={currName} 
-            onChange={handleNameChange} 
+    <>
+      <div className="space-y-3">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-slate-500">
+            Name
+          </label>
+
+          <input
+            type="text"
+            value={outputName}
+            onChange={(e) => setOutputName(e.target.value)}
+            placeholder="Output name"
+            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
-        </label>
-        <label>
-          Type:
-          <select value={outputType} onChange={handleTypeChange}>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-medium text-slate-500">
+            Type
+          </label>
+
+          <select
+            value={outputType}
+            onChange={(e) =>
+              setOutputType(e.target.value as OutputType)
+            }
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          >
             <option value="Text">Text</option>
-            <option value="File">Image</option>
+            <option value="Image">Image</option>
           </select>
-        </label>
+        </div>
       </div>
-    </div>
+
+      <NodeHandles
+        id={id}
+        inputs={["value"]}
+        outputs={[]}
+      />
+    </>
   );
 }
-
-export default OutputNode;
