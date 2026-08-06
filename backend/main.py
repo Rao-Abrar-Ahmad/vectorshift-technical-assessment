@@ -7,6 +7,12 @@ import asgi
 
 class Default(WorkerEntrypoint):
     async def fetch(self, request):
+        if request.url.path.startswith("/pipelines/"):
+            return await asgi.fetch(app, request, self.env)
+
+        if hasattr(self.env, "ASSETS"):
+            return await self.env.ASSETS.fetch(request)
+
         return await asgi.fetch(app, request, self.env)
 
 app = FastAPI()

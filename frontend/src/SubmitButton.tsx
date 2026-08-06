@@ -15,7 +15,9 @@ const SubmitButton = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/pipelines/parse", {
+      const apiBaseUrl = (window.location.hostname === "localhost" ? "http://localhost:8000" : "");
+
+      const response = await fetch(`${apiBaseUrl}/pipelines/parse`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
