@@ -4,3 +4,26 @@ frontend/build/
 .DS_Store
 frontend/.env
 frontend/.DS_Store
+
+
+
+# Python
+backend/__pycache__
+backend/__pycahce__
+backend/*.py[cod]
+backend/*.pyo
+
+# Virtual environment
+backend/.venv/
+backend/venv/
+backend/env/
+
+# Environment variables
+backend/.env
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
