@@ -1,6 +1,7 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const pathname = url.pathname;
 
     if (request.method === "OPTIONS") {
       return new Response(null, {
@@ -13,15 +14,11 @@ export default {
       });
     }
 
-    if (url.pathname === "/") {
-      return jsonResponse({ message: "Backend is running" }, 200);
-    }
-
-    if (url.pathname === "/health") {
+    if (pathname === "/health" && request.method === "GET") {
       return jsonResponse({ status: "ok" }, 200);
     }
 
-    if (url.pathname === "/pipelines/parse" && request.method === "POST") {
+    if (pathname === "/pipelines/parse" && request.method === "POST") {
       try {
         const body = await request.json();
         const nodes = Array.isArray(body?.nodes) ? body.nodes : [];
@@ -36,20 +33,19 @@ export default {
           200,
         );
       } catch (error) {
-        return jsonResponse(
-          {
-            detail: "Invalid request body",
-          },
-          400,
-        );
+        return jsonResponse({ detail: "Invalid request body" }, 400);
       }
     }
 
-    if (url.pathname.startsWith("/pipelines/")) {
+    if (pathname.startsWith("/pipelines")) {
       return jsonResponse({ detail: "Not found" }, 404);
     }
 
-    return env.ASSETS.fetch(request);
+    if (env && env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+
+    return new Response("Assets binding not configured", { status: 500 });
   },
 };
 
