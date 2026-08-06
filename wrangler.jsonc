@@ -1,11 +1,7 @@
 {
   "name": "vectorshift-technical-assessment",
-  "main": "backend/main.py",
+  "main": "backend/worker.js",
   "compatibility_date": "2026-08-06",
-
-  "compatibility_flags": [
-    "python_workers"
-  ],
 
   "assets": {
     "directory": "./frontend/build",
