@@ -1,5 +1,4 @@
 import { NodeProps } from "reactflow";
-import NodeIcon from "./NodeIcon";
 import { NodeConfig } from "../lib/types";
 import BaseNodeHeader from "./BaseNodeHeader";
 
