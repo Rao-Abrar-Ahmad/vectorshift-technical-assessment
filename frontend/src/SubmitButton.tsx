@@ -27,7 +27,7 @@ const SubmitButton = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit pipeline.");
+        throw new Error(`Failed to submit pipeline. \nStatus: ${response.status}  \nPlease check the console for more details. `);
       }
 
       const result = await response.json();
@@ -40,13 +40,19 @@ const SubmitButton = () => {
         Valid DAG: ${result.is_dag ? "Yes ✅" : "No ❌"}`,
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting pipeline:", error);
 
-      alert("Unable to submit the pipeline.");
+      alert(error || "Unable to submit the pipeline.");
     } finally {
       setLoading(false);
     }
   };
+
+  const isAnyNode = nodes.length === 0;
+
+  if (isAnyNode) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">

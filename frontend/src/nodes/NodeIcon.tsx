@@ -1,7 +1,7 @@
 import React from "react";
 import { NodeType } from "../lib/types";
 
-type ExtraIconType = "loading";
+type ExtraIconType = "loading" | "trash";
 
 export type IconType = NodeType | ExtraIconType;
 
@@ -117,6 +117,22 @@ export default function NodeIcon({
               clipRule="evenodd"
             />
           </svg>); 
+      case "trash":
+        return (<svg
+          width="15"
+          height="15"
+          viewBox="0 0 15 15"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3.5 5.5V12C3.5 12.5523 3.94772 13 4.5 13H10.5C11.0523 13 11.5 12.5523 11.5 12V5.5M2 3.5H13M6 3.5V2.5C6 2.22386 6.22386 2 6.5 2H8.5C8.77614 2 9 2.22386 9 2.5V3.5M6 6.5V10.5M9 6.5V10.5"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>);
       default:
       return null;
   }
