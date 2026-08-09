@@ -37,15 +37,15 @@ export const nodeConfigs: Partial<Record<NodeType, NodeConfig>> = {
     component: DelayNode,
   },
   merge: {
-  label: "Merge",
-  icon: "merge",
-  component: MergeNode,
-},
-date: {
-  label: "Date",
-  icon: "date",
-  component: DateNode,
-},
+    label: "Merge",
+    icon: "merge",
+    component: MergeNode,
+  },
+  date: {
+    label: "Date",
+    icon: "date",
+    component: DateNode,
+  },
   llm: {
     label: "LLM",
     icon: "llm",
